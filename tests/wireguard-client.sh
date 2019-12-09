@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+CONFIGS=$(psec environments path)/configs
 set -euxo pipefail
 
-xmllint --noout ./configs/10.0.8.100/wireguard/apple/*/*.mobileconfig
+xmllint --noout ${CONFIGS}/10.0.8.100/wireguard/apple/*/*.mobileconfig
 
-crudini --set configs/10.0.8.100/wireguard/user1.conf Interface Table off
+crudini --set ${CONFIGS}/10.0.8.100/wireguard/user1.conf Interface Table off
 
-wg-quick up configs/10.0.8.100/wireguard/user1.conf
+wg-quick up ${CONFIGS}/10.0.8.100/wireguard/user1.conf
 
 wg
 
@@ -22,4 +23,4 @@ host google.com 172.16.0.1
 
 echo "WireGuard tests passed"
 
-wg-quick down configs/10.0.8.100/wireguard/user1.conf
+wg-quick down ${CONFIGS}/10.0.8.100/wireguard/user1.conf

@@ -1,8 +1,9 @@
 ---
-- name: Ask user for the input
+- name: Ask user for the input if necessary
   hosts: localhost
   tags: always
   vars:
+    secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
     defaults:
       server_name: algo
       ondemand_cellular: false
@@ -23,6 +24,7 @@
       - { name: CloudStack (Exoscale optimised), alias: cloudstack }
       - { name: "Install to existing Ubuntu 18.04 or 19.10 server (for more advanced users)", alias: local }
   vars_files:
+    - '{{ secrets_file }}'
     - config.cfg
 
   tasks:

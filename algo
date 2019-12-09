@@ -15,9 +15,17 @@ then
   fi
 fi
 
+# If "psec -E run --" is used it exports a variable we can use
+# to switch to a psec specific playbook
+if [ ! -z '${PYTHON_SECRETS_ENVIRONMENT}' ]; then
+     PLAYBOOK=main-psec.yml;
+else
+     PLAYBOOK=main.yml;
+fi
+
 case "$1" in
   update-users) PLAYBOOK=users.yml; ARGS=( "${@:2}"  -t update-users ) ;;
-  *) PLAYBOOK=main.yml; ARGS=( "${@}" ) ;;
+  *) ARGS=( "${@}" ) ;;
 esac
 
 ansible-playbook ${PLAYBOOK} "${ARGS[@]}"

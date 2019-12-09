@@ -2,7 +2,10 @@
 - name: Configure the client
   hosts: localhost
   become: false
+  vars:
+    secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
   vars_files:
+    - '{{ secrets_file }}'
     - config.cfg
 
   tasks:

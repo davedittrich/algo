@@ -3,7 +3,11 @@
   hosts: vpn-host
   gather_facts: false
   become: true
+  vars:
+    secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
+    configs: '{{ lookup("pipe", "psec environments path") }}/configs'
   vars_files:
+    - '{{ secrets_file }}'
     - config.cfg
   tasks:
     - block:
@@ -68,7 +72,7 @@
       - block:
         - name: Dump the configuration
           copy:
-            dest: "configs/{{ IP_subject_alt_name }}/.config.yml"
+            dest: "{{ configs }}/{{ IP_subject_alt_name }}/.config.yml"
             content: |
               server: {{ 'localhost' if inventory_hostname == 'localhost' else inventory_hostname }}
               server_user: {{ ansible_ssh_user }}
@@ -97,7 +101,7 @@
         - name: Create a symlink if deploying to localhost
           file:
             src: "{{ IP_subject_alt_name }}"
-            dest: configs/localhost
+            dest: '{{ configs }}/localhost'
             state: link
             force: true
           when: inventory_hostname == 'localhost'

@@ -2,14 +2,18 @@
 - hosts: localhost
   gather_facts: False
   tags: always
+  vars:
+    secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
+    configs: '{{ lookup("pipe", "psec environments path") }}/configs'
   vars_files:
+    - '{{ secrets_file }}'
     - config.cfg
 
   tasks:
     - block:
         - name: Get list of installed config files
           find:
-            paths: configs/
+            paths: '{{ configs }}/'
             depth: 2
             recurse: true
             hidden: true
@@ -50,7 +54,7 @@
 
         - name: Import host specific variables
           include_vars:
-            file: "configs/{{ algo_server }}/.config.yml"
+            file: "{{ configs }}/{{ algo_server }}/.config.yml"
 
         - when: ipsec_enabled
           block:
@@ -89,7 +93,8 @@
   become: true
   vars_files:
     - config.cfg
-    - "configs/{{ inventory_hostname }}/.config.yml"
+    - "{{ configs }}/{{ inventory_hostname }}/.config.yml"
+    - '{{ lookup("pipe", "psec secrets path") }}'
 
   tasks:
     - block:
