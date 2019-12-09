@@ -1,6 +1,40 @@
 ---
-- name: Include prompts
-  import_tasks: prompts.yml
+
+# Be careful about translating variables here. Algo originally
+# used "do_token" while ansible-dims-playbooks used "do_api_token".
+- name: Assert do_api_token is defined
+  assert:
+    that:
+      - do_api_token is defined
+
+- name: Assert do_region is defined
+  assert:
+    that:
+      - do_region is defined
+
+- name: Translate variable name do_api_token -> do_token
+  set_fact:
+    do_token: "{{ do_api_token }}"
+
+- name: Set the token as a fact
+  set_fact:
+    algo_do_token: "{{ do_token }}"
+  when:
+    - do_token is defined
+    - algo_do_token is undefined
+
+- name: Set the region as a fact
+  set_fact:
+    algo_do_region: "{{ do_region }}"
+  when:
+    - do_region is defined
+    - algo_do_region is undefined
+
+# This won't be necessary using python_secrets
+#- name: Include prompts
+#  import_tasks: prompts.yml
+#  when:
+#    - algo_do_token is undefined or algo_do_region is undefined
 
 - name: "Upload the SSH key"
   digital_ocean_sshkey:
@@ -15,7 +49,7 @@
     name: "{{ algo_server_name }}"
     oauth_token: "{{ algo_do_token }}"
     size: "{{ cloud_providers.digitalocean.size }}"
-    region: "{{ algo_do_region }}"
+    region: "{{ do_region }}"
     image: "{{ cloud_providers.digitalocean.image }}"
     wait_timeout: 300
     unique_name: true

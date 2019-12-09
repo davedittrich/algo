@@ -5,6 +5,7 @@
     echo: false
   register: _do_token
   when:
+    - algo_do_token is undefined
     - do_token is undefined
     - lookup('env','DO_API_TOKEN')|length <= 0
 
@@ -21,10 +22,14 @@
       Content-Type: "application/json"
       Authorization: "Bearer {{ algo_do_token }}"
   register: _do_regions
+  when:
+    - do_region is undefined
 
 - name: Set facts about the regions
   set_fact:
     do_regions: "{{ _do_regions.json.regions | sort(attribute='slug') }}"
+  when:
+    - do_region is undefined
 
 - name: Set default region
   set_fact:
@@ -32,6 +37,8 @@
       {% for r in do_regions %}
       {%- if r['slug'] == "nyc3" %}{{ loop.index }}{% endif %}
       {%- endfor %}
+  when:
+    - do_region is undefined
 
 - pause:
     prompt: |
@@ -43,11 +50,12 @@
       Enter the number of your desired region
       [{{ default_region }}]
   register: _algo_region
-  when: region is undefined
+  when:
+    - do_region is undefined
 
 - name: Set additional facts
   set_fact:
     algo_do_region: >-
-      {% if region is defined %}{{ region }}
+      {% if do_region is defined %}{{ do_region }}
       {%- elif _algo_region.user_input %}{{ do_regions[_algo_region.user_input | int -1 ]['slug'] }}
       {%- else %}{{ do_regions[default_region | int - 1]['slug'] }}{% endif %}

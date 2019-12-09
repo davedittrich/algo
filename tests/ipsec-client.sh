@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
+CONFIGS=$(psec environments path)/configs
 set -euxo pipefail
 
-xmllint --noout ./configs/10.0.8.100/ipsec/apple/user1.mobileconfig
+xmllint --noout ${CONFIGS}/10.0.8.100/ipsec/apple/user1.mobileconfig
 
 ansible-playbook deploy_client.yml \
   -e client_ip=localhost \
