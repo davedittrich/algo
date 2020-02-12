@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-CONFIGS=$(psec environments path)/configs
 set -euxo pipefail
+
+CONFIGS=$(psec environments path)/configs
 
 xmllint --noout ${CONFIGS}/10.0.8.100/ipsec/apple/user1.mobileconfig
 
 CA_CONSTRAINTS="$(openssl verify -verbose \
-  -CAfile ./configs/10.0.8.100/ipsec/.pki/cacert.pem \
-  ./configs/10.0.8.100/ipsec/.pki/certs/google-algo-test-pair.com.crt 2>&1)" || true
+  -CAfile ${CONFIGS}/10.0.8.100/ipsec/.pki/cacert.pem \
+  ${CONFIGS}/10.0.8.100/ipsec/.pki/certs/google-algo-test-pair.com.crt 2>&1)" || true
 
 echo "$CA_CONSTRAINTS" | grep "permitted subtree violation" >/dev/null && \
   echo "Name Constraints test passed" || \

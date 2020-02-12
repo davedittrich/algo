@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-CONFIGS=$(psec environments path)/configs
 set -euxo pipefail
+
+CONFIGS=$(psec environments path)/configs
 
 xmllint --noout ${CONFIGS}/10.0.8.100/wireguard/apple/*/*.mobileconfig
 
