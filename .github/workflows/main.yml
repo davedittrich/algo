@@ -125,6 +125,7 @@ jobs:
             python3-dev \
             linux-headers-$(uname -r) \
             wireguard \
+            libxml2 \
             libxml2-utils \
             crudini \
             fping \
