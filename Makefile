@@ -1,3 +1,5 @@
+SHELL=/bin/bash
+
 ## docker-build: Build and tag a docker image
 .PHONY: docker-build
 
@@ -37,3 +39,20 @@ docker-prune:
 .PHONY: docker-all
 
 docker-all: docker-build docker-deploy docker-prune
+
+## psec-configure: Set up python_secrets variables
+.PHONY: psec-configure
+
+psec-init:
+	@if [ "$(shell psec secrets get algo_provider)" == "None" ]; \
+	then \
+		psec secrets set --undefined; \
+	fi
+	@if [ "$(shell psec secrets get algo_provider)" == "None" ]; \
+	then \
+		echo 'algo_provider not defined: exiting'; exit 1; \
+	fi
+	@echo 'algo_provider is defined'
+
+psec-provider-init:
+	@echo 'not implemented yet...'
