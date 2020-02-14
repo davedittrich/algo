@@ -3,6 +3,7 @@
   become: false
   vars:
     secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
+    configs: '{{ lookup("pipe", "psec secrets path --tmpdir") }}/configs'
   vars_files:
     - '{{ secrets_file }}'
   tasks:
