@@ -2,7 +2,7 @@ FROM python:3-alpine
 
 ARG VERSION="git"
 ARG PACKAGES="bash libffi openssh-client openssl rsync tini"
-ARG BUILD_PACKAGES="gcc libffi-dev linux-headers make musl-dev openssl-dev"
+ARG BUILD_PACKAGES="gcc libffi-dev libxml2-dev libxslt-dev linux-headers make musl-dev openssl-dev"
 
 LABEL name="algo" \
       version="${VERSION}" \
