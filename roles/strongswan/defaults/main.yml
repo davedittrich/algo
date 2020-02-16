@@ -1,5 +1,4 @@
 ---
-configs: '{{ "pipe", "psec environments path" }}/configs'
 ipsec_config_path: "{{ configs }}/{{ IP_subject_alt_name }}/ipsec/"
 ipsec_pki_path: "{{ ipsec_config_path }}/.pki/"
 strongswan_shell: /usr/sbin/nologin

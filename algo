@@ -2,6 +2,8 @@
 
 set -e
 
+export ALGO_CONFIGS="${ALGO_CONFIGS:-$(psec environments path)/configs}"
+
 if [ -z ${VIRTUAL_ENV+x} ]
 then
   ACTIVATE_SCRIPT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.env/bin/activate"

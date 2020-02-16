@@ -5,11 +5,18 @@
   become: true
   vars:
     secrets_file: '{{ lookup("pipe", "psec secrets path") }}'
-    configs: '{{ lookup("pipe", "psec environments path") }}/configs'
   vars_files:
     - '{{ secrets_file }}'
     - config.cfg
   tasks:
+    - name: Set configs directory path
+      set_fact:
+        configs: '{% if algo_configs != '' %}{{ algo_configs }}{% else %}{{ lookup("pipe", "psec environments path") }}/configs{% endif %}'
+
+    - name: Debug configs path
+      debug:
+        var: configs
+
     - block:
       - name: Wait until the cloud-init completed
         wait_for:
