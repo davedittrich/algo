@@ -1,4 +1,5 @@
 SHELL=/bin/bash
+ALGO_CONFIGS=$(shell psec environments path configs)
 
 ## docker-build: Build and tag a docker image
 .PHONY: docker-build
@@ -9,7 +10,7 @@ DOCKERFILE     := Dockerfile
 CONFIGURATIONS := $(shell pwd)
 
 docker-build:
-	docker build \
+	psec -E run -- docker build \
 	-t $(IMAGE):$(TAG) \
 	-f $(DOCKERFILE) \
 	.
@@ -19,7 +20,7 @@ docker-build:
 
 # '--rm' flag removes the container when finished.
 docker-deploy:
-	docker run \
+	psec -E run -- docker run \
 	--cap-drop=all \
 	--rm \
 	-it \
@@ -30,7 +31,7 @@ docker-deploy:
 .PHONY: docker-prune
 
 docker-prune:
-	docker images \
+	psec -E run -- docker images \
 	$(IMAGE) |\
 	awk '{if (NR>1) print $$3}' |\
 	xargs docker rmi
@@ -43,6 +44,8 @@ docker-all: docker-build docker-deploy docker-prune
 ## psec-configure: Set up python_secrets variables
 .PHONY: psec-configure
 
+
+.PHONY: psec-init
 psec-init:
 	@if [ "$(shell psec secrets get algo_provider)" == "None" ]; \
 	then \
@@ -54,5 +57,11 @@ psec-init:
 	fi
 	@echo 'algo_provider is defined'
 
+.PHONY: psec-provider-init
 psec-provider-init:
 	@echo 'not implemented yet...'
+
+
+.PHONY: deploy
+deploy:
+	psec -E run -- bash algo
