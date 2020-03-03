@@ -2,7 +2,7 @@
 
 set -e
 
-export ALGO_CONFIGS="${ALGO_CONFIGS:-$(psec environments path configs)}"
+export ALGO_CONFIGS="${ALGO_CONFIGS:-$(psec environments path configs --create)}"
 
 if [ -z ${VIRTUAL_ENV+x} ]
 then
@@ -21,6 +21,7 @@ fi
 # to switch to a psec specific playbook
 if [ -n "${PYTHON_SECRETS_ENVIRONMENT}" ]; then
      PLAYBOOK=main-psec.yml;
+     ARGS="-e @\"$(psec secrets path)\" ${ARGS}"
 else
      PLAYBOOK=main.yml;
 fi
