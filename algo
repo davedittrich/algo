@@ -2,7 +2,7 @@
 
 set -e
 
-export ALGO_CONFIGS="${ALGO_CONFIGS:-$(psec environments path)/configs}"
+export ALGO_CONFIGS="${ALGO_CONFIGS:-$(psec environments path configs)}"
 
 if [ -z ${VIRTUAL_ENV+x} ]
 then

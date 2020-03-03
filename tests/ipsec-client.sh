@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-CONFIGS="${ALGO_CONFIGS:-$(psec environments path)/configs}"
+CONFIGS="${ALGO_CONFIGS:-$(psec environments path configs)}"
 
 xmllint --noout ${CONFIGS}/10.0.8.100/ipsec/apple/user1.mobileconfig
 

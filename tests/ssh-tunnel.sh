@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-CONFIGS="${ALGO_CONFIGS:-$(psec environments path)/configs}"
+CONFIGS="${ALGO_CONFIGS:-$(psec environments path configs)}"
 
 PASS=$(grep ^p12_password: ${CONFIGS}/10.0.8.100/.config.yml | awk '{print $2}' | cut -f2 -d\')
 

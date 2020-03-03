@@ -11,7 +11,7 @@
   tasks:
     - name: Set configs directory path
       set_fact:
-        configs: '{% if algo_configs != '' %}{{ algo_configs }}{% else %}{{ lookup("pipe", "psec environments path") }}/configs{% endif %}'
+        configs: '{% if algo_configs != '' %}{{ algo_configs }}{% else %}{{ lookup("pipe", "psec environments path configs") }}{% endif %}'
 
     - name: Debug configs path
       debug:
